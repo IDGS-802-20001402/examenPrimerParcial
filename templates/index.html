@@ -1,0 +1,89 @@
+{%- extends "layout.html" -%} {%- block content -%} {# If resultado isset #}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="mt-5 card">
+      {% if not resultado %}
+      <div class="card-header">Operaciones</div>
+      <form action="/procesar" method="post">
+        <div class="card-body">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="ver_solucion"
+              name="ver_solucion"
+              checked
+            />
+            <label class="form-check-label" for="ver_solucion"
+              >Ver solucion</label
+            >
+          </div>
+          <div class="my-2 operacion">
+            <label>Operacion</label>
+            <input type="text" name="operaciones" class="form-control" />
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-grid gap-2 d-md-block text-center">
+            <button class="btn btn-info btn-sm" type="button" id="btn-add">
+              Agregar
+            </button>
+            <button class="btn btn-primary btn-sm" type="submit">
+              Procesar
+            </button>
+          </div>
+        </div>
+      </form>
+      {% else %} {% if resultado.error %}
+      <div class="card-header">Operaciones</div>
+      <div class="card-body">
+        <h1 class="text-center">{{resultado.error}}</h1>
+      </div>
+      <div class="d-grid gap-2 d-md-block text-center">
+        <a href="/" class="btn btn-primary btn-sm">Volver</a>
+      </div>
+      {% else %} {% autoescape false %}
+
+      <div class="card-header"><h4>Resultados</h4></div>
+      <div class="card-body text-center">
+      <code>
+        {{resultado.resultado}}
+      </code>
+
+      </div>
+      <div class="card-footer">
+        <div class="d-grid gap-2 d-md-block text-center">
+          <a href="/" class="btn btn-primary btn-sm">Volver</a>
+        </div>
+      </div>
+
+      {% endautoescape %} {% endif %} {% endif %}
+    </div>
+  </div>
+</div>
+
+{%- endblock -%} {# End if #} {%- block scripts -%}
+
+<script>
+  //create new operacioens input and add at the end
+
+  const btnAdd = document.getElementById("btn-add");
+
+  btnAdd.addEventListener("click", () => {
+    const operacion = document.querySelector(".operacion");
+
+    const newOperacion = operacion.cloneNode(true);
+
+    const input = newOperacion.querySelector("input");
+
+    input.value = "";
+
+    const cardBody = document.querySelector(".card-body");
+
+    cardBody.appendChild(newOperacion);
+  });
+</script>
+
+{%- endblock -%}
